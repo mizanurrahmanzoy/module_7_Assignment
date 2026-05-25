@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({super.key});
+class AddTaskScreen extends StatefulWidget {
+  AddTaskScreen({super.key});
+
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  final taskGroup = TextEditingController();
+  final taskDesc = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    taskGroup.dispose();
+    taskDesc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +30,7 @@ class AddTaskScreen extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              controller: taskGroup,
               decoration: InputDecoration(
                 labelText: "Task Group",
                 border: OutlineInputBorder(
@@ -26,7 +43,7 @@ class AddTaskScreen extends StatelessWidget {
 
             TextFormField(
               maxLines: 5,
-
+              controller: taskDesc,
               decoration: InputDecoration(
                 labelText: "Description",
 
@@ -48,7 +65,11 @@ class AddTaskScreen extends StatelessWidget {
                 ),
 
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, {
+                    'taskGroup': taskGroup.text,
+                    'taskDesc': taskDesc.text,
+
+                  });
                 },
 
                 child: const Text(
