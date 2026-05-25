@@ -44,7 +44,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("To-Do List"), centerTitle: true),
+      appBar: AppBar(title: const Text("To-Do List"), centerTitle: true, elevation: 1),
 
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -86,7 +86,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
 }
 
 class TaskCard extends StatelessWidget {
-  @override
   final String id;
   final String title;
   final String time;

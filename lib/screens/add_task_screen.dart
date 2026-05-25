@@ -10,6 +10,7 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final taskGroup = TextEditingController();
   final taskDesc = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -27,58 +28,68 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
 
-        child: Column(
-          children: [
-            TextFormField(
-              controller: taskGroup,
-              decoration: InputDecoration(
-                labelText: "Task Group",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            TextFormField(
-              maxLines: 5,
-              controller: taskDesc,
-              decoration: InputDecoration(
-                labelText: "Description",
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-
-            const Spacer(),
-
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                ),
-
-                onPressed: () {
-                  Navigator.pop(context, {
-                    'taskGroup': taskGroup.text,
-                    'taskDesc': taskDesc.text,
-
-                  });
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter some text";
+                  }
+                  return null;
                 },
-
-                child: const Text(
-                  "Add",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                controller: taskGroup,
+                decoration: InputDecoration(
+                  labelText: "Task Group",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20),
+
+              TextFormField(
+                maxLines: 5,
+                controller: taskDesc,
+                decoration: InputDecoration(
+                  labelText: "Description",
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                  ),
+
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pop(context, {
+                        'taskGroup': taskGroup.text,
+                        'taskDesc': taskDesc.text,
+                      });
+                    }
+                  },
+
+                  child: const Text(
+                    "Add",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
