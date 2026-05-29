@@ -44,7 +44,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("To-Do List"), centerTitle: true, elevation: 1),
+      appBar: AppBar(
+        title: const Text("To-Do List"),
+        centerTitle: true,
+        elevation: 1,
+      ),
 
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -73,11 +77,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
       print(result.runtimeType);
       taskCards.add(
         TaskCard(
-          id: (taskCards.length+1).toString(),
+          id: (taskCards.length + 1).toString(),
           title: result["taskDesc"],
           time: TimeOfDay.now().format(context).toString(),
           status: result["taskGroup"],
-          color: Colors.green,
+          color: result["color"],
         ),
       );
       setState(() {});
@@ -161,7 +165,7 @@ class TaskCard extends StatelessWidget {
 
               child: Text(
                 status,
-                style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                style: TextStyle(color: color, fontWeight: FontWeight.w600),
               ),
             ),
           ],

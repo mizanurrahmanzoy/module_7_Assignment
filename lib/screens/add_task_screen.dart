@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  AddTaskScreen({super.key});
+  AddTaskScreen();
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -11,10 +11,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final taskGroup = TextEditingController();
   final taskDesc = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  // Choice Chip list
+  final Map<String, Color> group = {
+    "Done": Colors.green,
+    "In Progress": Colors.orange,
+    "To-Do": Colors.deepPurple,
+  };
+  String selectedValue = '';
 
   @override
   void dispose() {
-    // TODO: implement dispose
     taskGroup.dispose();
     taskDesc.dispose();
     super.dispose();
@@ -32,7 +38,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           key: _formKey,
           child: Column(
             children: [
+              Wrap(
+                spacing: 10,
+                children: group.entries.map((item) {
+                  return ChoiceChip(
+                    label: Text(item.key),
+                    backgroundColor: item.value.withAlpha(150),
+                    selectedColor: item.value,
+                    labelStyle: TextStyle(color: Colors.white),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    checkmarkColor: Colors.white,
+                    selected: selectedValue == item.key,
+                    onSelected: (selected) {
+                      setState(() {
+                        selectedValue = selected ? item.key : '';
+                        taskGroup.text = selected ? item.key : '';
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
               TextFormField(
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter some text";
@@ -42,6 +72,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 controller: taskGroup,
                 decoration: InputDecoration(
                   labelText: "Task Group",
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -52,6 +83,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               TextFormField(
                 maxLines: 5,
+
                 controller: taskDesc,
                 decoration: InputDecoration(
                   labelText: "Description",
@@ -78,6 +110,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       Navigator.pop(context, {
                         'taskGroup': taskGroup.text,
                         'taskDesc': taskDesc.text,
+                        Color: group[selectedValue],
                       });
                     }
                   },
